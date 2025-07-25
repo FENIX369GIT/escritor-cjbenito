@@ -1,66 +1,138 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Escritor C J Benito</title>
-
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text y='20' font-size='20'>✏️</text></svg>"/>
   <style>
     :root{
-      --bg:#f5f7fa; --card:#fff; --accent:#0077ff; --marine:#1e88e5;
-      --text:#333; --subtle:#8a94a6; --radius:12px; --shadow:0 4px 14px rgba(0,0,0,.08);
-      --font:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+      --bg:#000;
+      --bg-soft:#111;
+      --card:#0a0a0a;
+      --accent:#00b4ff;
+      --accent2:#0af;
+      --text:#e1e1ff;
+      --subtle:#6b7280;
+      --radius:14px;
+      --shadow:0 8px 24px rgba(0,180,255,.15);
+      --font:'Inter',sans-serif;
+      --mono:'JetBrains Mono',monospace;
+    }
+    [data-theme="light"]{
+      --bg:#f2f5f9;
+      --bg-soft:#fff;
+      --card:#ffffff;
+      --accent:#0066ff;
+      --accent2:#0099ff;
+      --text:#111;
+      --subtle:#4b5563;
+      --shadow:0 8px 24px rgba(0,102,255,.15);
     }
     *{box-sizing:border-box;margin:0;padding:0}
-    body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;padding:2rem}
-    .wrapper{max-width:420px;width:100%;margin:auto}
-
-    nav{display:flex;gap:.5rem;margin-bottom:1.5rem}
+    body{
+      background:var(--bg);
+      color:var(--text);
+      font-family:var(--font);
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      padding:2rem 1rem;
+      transition:background .3s ease,color .3s ease;
+    }
+    .wrapper{max-width:700px;width:100%}
+    /* --- Theme toggle --- */
+    .theme-toggle{
+      position:absolute;
+      top:1rem;
+      right:1rem;
+      background:none;
+      border:none;
+      color:var(--accent);
+      font-size:1.4rem;
+      cursor:pointer;
+    }
+    /* --- Nav --- */
+    nav{
+      display:flex;
+      gap:.5rem;
+      margin-bottom:2rem;
+    }
     nav button{
       flex:1;
-      padding:.8rem;
+      padding:.9rem;
       border:none;
       border-radius:var(--radius);
       background:var(--card);
       color:var(--accent);
       font-size:1rem;
+      font-weight:600;
       box-shadow:var(--shadow);
       cursor:pointer;
-      transition:.2s;
+      transition:all .3s ease;
     }
-    nav button.active,
-    nav button:hover{background:var(--accent);color:#fff}
-
-    section{display:none}
+    nav button.active,nav button:hover{
+      background:var(--accent);
+      color:#000;
+      transform:translateY(-2px);
+    }
+    /* --- Section --- */
+    section{display:none;animation:fadeIn .5s ease}
     section.active{display:block}
-
-    h1{text-align:center;margin-bottom:1.5rem}
-    form{display:flex;gap:.5rem}
-    input,button{border:none;padding:.9rem 1.2rem;font-size:1rem;border-radius:var(--radius)}
-    input{flex:1;background:var(--card);box-shadow:var(--shadow);outline:none}
-    button{background:var(--accent);color:#fff;cursor:pointer}
-    button:hover{opacity:.9}
-    #cities{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem;justify-content:center}
-    #cities button{background:var(--card);color:var(--accent);border:1px solid var(--accent);box-shadow:var(--shadow);border-radius:var(--radius);padding:.4rem .8rem;cursor:pointer}
-    #result{margin-top:1.5rem}
-    .weather-card,.marine-card{background:var(--card);border-radius:var(--radius);padding:1.5rem;box-shadow:var(--shadow);margin-bottom:1rem}
-    .marine-card{border-left:4px solid var(--marine)}
-    .marine-card h3{color:var(--marine);display:flex;align-items:center;gap:.5rem}
-    .marine-card h3::before{content:"🌊";font-size:1.2em}
-    .marine-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.5rem}
-    .marine-item{background:rgba(30,136,229,.05);padding:.8rem;border-radius:8px;text-align:center}
-    .marine-item strong{color:var(--marine);display:block;font-size:1.1em}
-    .wave-height{font-size:1.5em;color:var(--marine);font-weight:bold}
-
-    .gas-iframe{
-      width:100%;
-      min-height:70vh;
+    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    h1{text-align:center;margin-bottom:1.5rem;font-size:clamp(1.5rem,2vw+1rem,2.2rem)}
+    form{display:flex;gap:.5rem;margin-bottom:1rem}
+    input,button{
       border:none;
+      padding:1rem;
+      font-size:1rem;
       border-radius:var(--radius);
+    }
+    input{
+      flex:1;
+      background:var(--card);
       box-shadow:var(--shadow);
+      outline:none;
+      color:var(--text);
+    }
+    button[type="submit"]{
+      background:var(--accent);
+      color:#000;
+      cursor:pointer;
+      transition:all .2s ease;
+    }
+    button[type="submit"]:hover{opacity:.9}
+    /* --- Cards --- */
+    .weather-card,.marine-card{
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:1.5rem;
+      box-shadow:var(--shadow);
+      margin-bottom:1.5rem;
+      transition:transform .2s ease;
+    }
+    .weather-card:hover,.marine-card:hover{transform:translateY(-4px)}
+    .marine-card{border-left:4px solid var(--accent)}
+    .marine-card h3{color:var(--accent);display:flex;align-items:center;gap:.5rem;font-size:1.2rem}
+    .marine-card h3::before{content:"🌊";font-size:1.4em}
+    .marine-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;margin-top:.5rem}
+    .marine-item{background:rgba(0,180,255,.1);padding:1rem;border-radius:10px;text-align:center;font-family:var(--mono)}
+    .marine-item strong{color:var(--accent);display:block;font-size:1.2em}
+    .wave-height{font-size:1.6em;color:var(--accent);font-weight:700}
+    .gas-iframe{width:100%;min-height:70vh;border:none;border-radius:var(--radius);box-shadow:var(--shadow)}
+    .loading{text-align:center;color:var(--subtle);margin-top:1rem}
+    /* --- Responsive --- */
+    @media(max-width:600px){
+      h1{font-size:1.5rem}
+      nav{flex-direction:column}
     }
   </style>
 </head>
 <body>
+  <button class="theme-toggle" title="Cambiar tema">🌓</button>
   <div class="wrapper">
     <nav>
       <button class="nav-btn active" data-section="clima">Clima</button>
@@ -70,7 +142,7 @@
     <section id="clima" class="active">
       <h1>Escritor C J Benito</h1>
       <form id="weatherForm">
-        <input id="city" type="text" placeholder="Ej. Valencia, Barcelona, Cádiz" required>
+        <input id="city" type="text" placeholder="Ej. Valencia, Barcelona, Cádiz" required/>
         <button>Buscar</button>
       </form>
       <div id="cities"></div>
@@ -79,17 +151,25 @@
 
     <section id="gas">
       <h1>Precios de Gasolina en España</h1>
-      <iframe
-        class="gas-iframe"
-        src="https://pakogarcia.github.io/gasolineras-espana/"
-        title="Gasolineras España">
-      </iframe>
+      <iframe class="gas-iframe" src="https://pakogarcia.github.io/gasolineras-espana/" title="Gasolineras España"></iframe>
     </section>
   </div>
 
   <script>
-    const apiKeyOWM = '42fb25c111df56e277d76dd2b52bdc65';
+    /* --- Tema oscuro / claro --- */
+    const toggleBtn = document.querySelector('.theme-toggle');
+    const html = document.documentElement;
+    const saved = localStorage.getItem('theme') || 'dark';
+    html.setAttribute('data-theme', saved);
+    toggleBtn.addEventListener('click', () => {
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
 
+    /* --- Resto de JS sin cambios --- */
+    const apiKeyOWM = '42fb25c111df56e277d76dd2b52bdc65';
     const coastalCities = [
       'valencia','barcelona','alicante','málaga','cádiz','huelva','gijón','a coruña','vigo',
       'bilbao','santander','san sebastián','palma','ibiza','mahón','las palmas','santa cruz de tenerife',
@@ -141,7 +221,7 @@
           <p>Mín. ${w.main.temp_min} °C / Máx. ${w.main.temp_max} °C</p>
           <p>Humedad ${w.main.humidity} % · Presión ${w.main.pressure} hPa</p>
           <p>Viento ${w.wind.speed} m/s</p>
-          <img src="https://openweathermap.org/img/wn/${w.weather[0].icon}@2x.png" alt="icono">
+          <img src="https://openweathermap.org/img/wn/${w.weather[0].icon}@2x.png" alt="icono del clima">
         </div>`;
 
       if(coastal){
