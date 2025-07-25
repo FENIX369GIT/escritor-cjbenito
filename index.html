@@ -2,140 +2,42 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Escritor C J Benito</title>
   <style>
-    :root {
-      --bg: #f5f7fa;
-      --card: #ffffff;
-      --accent: #0077ff;
-      --marine: #1e88e5;
-      --text: #333;
-      --subtle: #8a94a6;
-      --radius: 12px;
-      --shadow: 0 4px 14px rgba(0,0,0,.08);
-      --font: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+    :root{
+      --bg:#f5f7fa; --card:#fff; --accent:#0077ff; --marine:#1e88e5;
+      --text:#333; --subtle:#8a94a6; --radius:12px; --shadow:0 4px 14px rgba(0,0,0,.08);
+      --font:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
     }
     *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font);
-      display: grid;
-      place-items: center;
-      min-height: 100vh;
-      padding: 2rem;
-    }
-    .wrapper{
-      width: 100%;
-      max-width: 420px;
-    }
-    h1{ text-align: center; margin-bottom: 1.5rem; }
-    form{ display: flex; gap: .5rem; }
-    input, button{
-      border: none;
-      padding: .9rem 1.2rem;
-      font-size: 1rem;
-      border-radius: var(--radius);
-    }
-    input{
-      flex: 1 1 auto;
-      background: var(--card);
-      box-shadow: var(--shadow);
-      outline: none;
-    }
-    button{
-      background: var(--accent);
-      color: #fff;
-      cursor: pointer;
-      transition: opacity .2s;
-    }
-    button:hover{ opacity: .9; }
-    #cities{
-      margin-top: 1rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: .5rem;
-      justify-content: center;
-    }
-    #cities button{
-      background: var(--card);
-      color: var(--accent);
-      border: 1px solid var(--accent);
-      box-shadow: var(--shadow);
-      border-radius: var(--radius);
-      padding: .4rem .8rem;
-      cursor: pointer;
-    }
-    #result{ margin-top: 1.5rem; }
-    .weather-card, .marine-card{
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      box-shadow: var(--shadow);
-      animation: fade .4s ease;
-      margin-bottom: 1rem;
-    }
-    .marine-card{
-      border-left: 4px solid var(--marine);
-    }
-    .marine-card h3{
-      color: var(--marine);
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .marine-card h3::before{
-      content: "🌊";
-      font-size: 1.2em;
-    }
-    @keyframes fade{
-      from{opacity:0;transform:translateY(-10px)}
-      to{opacity:1;transform:none}
-    }
-    .weather-card h2{ margin-bottom: .5rem; font-size: 1.5rem; }
-    .weather-card p, .marine-card p{ margin: .3rem 0; color: var(--subtle); }
-    .weather-card strong, .marine-card strong{ color: var(--text); }
-    .marine-grid{
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-top: 0.5rem;
-    }
-    .marine-item{
-      background: rgba(30, 136, 229, 0.05);
-      padding: 0.8rem;
-      border-radius: 8px;
-      text-align: center;
-    }
-    .marine-item strong{
-      display: block;
-      color: var(--marine);
-      font-size: 1.1em;
-    }
-    .wave-height{
-      font-size: 1.5em;
-      color: var(--marine);
-      font-weight: bold;
-    }
-    .loading{
-      text-align: center;
-      font-size: 1.2rem;
-      color: var(--subtle);
-    }
+    body{background:var(--bg);color:var(--text);font-family:var(--font);display:grid;place-items:center;min-height:100vh;padding:2rem}
+    .wrapper{max-width:420px;width:100%}
+    h1{text-align:center;margin-bottom:1.5rem}
+    form{display:flex;gap:.5rem}
+    input,button{border:none;padding:.9rem 1.2rem;font-size:1rem;border-radius:var(--radius)}
+    input{flex:1;background:var(--card);box-shadow:var(--shadow);outline:none}
+    button{background:var(--accent);color:#fff;cursor:pointer}
+    button:hover{opacity:.9}
+    #cities{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem;justify-content:center}
+    #cities button{background:var(--card);color:var(--accent);border:1px solid var(--accent);box-shadow:var(--shadow);border-radius:var(--radius);padding:.4rem .8rem;cursor:pointer}
+    #result{margin-top:1.5rem}
+    .weather-card,.marine-card{background:var(--card);border-radius:var(--radius);padding:1.5rem;box-shadow:var(--shadow);margin-bottom:1rem}
+    .marine-card{border-left:4px solid var(--marine)}
+    .marine-card h3{color:var(--marine);display:flex;align-items:center;gap:.5rem}
+    .marine-card h3::before{content:"🌊";font-size:1.2em}
+    .marine-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.5rem}
+    .marine-item{background:rgba(30,136,229,.05);padding:.8rem;border-radius:8px;text-align:center}
+    .marine-item strong{color:var(--marine);display:block;font-size:1.1em}
+    .wave-height{font-size:1.5em;color:var(--marine);font-weight:bold}
   </style>
 </head>
 <body>
-
   <div class="wrapper">
     <h1>Escritor C J Benito</h1>
-
     <form id="weatherForm">
       <input id="city" type="text" placeholder="Ej. Valencia, Barcelona, Cádiz" required>
-      <button type="submit">Buscar</button>
+      <button>Buscar</button>
     </form>
-
     <div id="cities"></div>
     <div id="result"></div>
   </div>
@@ -143,249 +45,106 @@
   <script>
     const apiKeyOWM = '42fb25c111df56e277d76dd2b52bdc65';
     const apiKeyStorm = '1f3bb258-6877-11f0-89b2-0242ac130006-1f3bb2b2-6877-11f0-89b2-0242ac130006';
-    const loaderHTML = '<div class="loading">Cargando datos meteorológicos...</div>';
 
-    // Ciudades costeras españolas conocidas
     const coastalCities = [
-      'valencia', 'barcelona', 'alicante', 'málaga', 'sevilla', 'cádiz', 'huelva',
-      'santander', 'bilbao', 'san sebastián', 'gijón', 'a coruña', 'vigo',
-      'palma', 'ibiza', 'mahón', 'las palmas', 'santa cruz de tenerife',
-      'almería', 'cartagena', 'murcia', 'castellón', 'tarragona', 'girona'
+      'valencia','barcelona','alicante','málaga','cádiz','huelva','gijón','a coruña','vigo',
+      'bilbao','santander','san sebastián','palma','ibiza','mahón','las palmas','santa cruz de tenerife',
+      'almería','cartagena','murcia','castellón','tarragona','girona'
     ];
 
-    function isCoastalCity(cityName, country) {
-      if (country !== 'ES') return false;
-      const normalizedName = cityName.toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
-      
-      return coastalCities.some(coastal => 
-        normalizedName.includes(coastal) || coastal.includes(normalizedName)
-      );
+    function isCoastal(name, country){
+      if(country!=='ES') return false;
+      const n=name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+      return coastalCities.some(c=>n.includes(c) || c.includes(n));
     }
 
-    document.getElementById('weatherForm').addEventListener('submit', async e => {
+    document.getElementById('weatherForm').addEventListener('submit', async e=>{
       e.preventDefault();
-      const cityName = document.getElementById('city').value.trim();
-      if (!cityName) return;
-
-      document.getElementById('result').innerHTML = loaderHTML;
-      document.getElementById('cities').innerHTML = '';
-
-      const urlFind = `https://api.openweathermap.org/data/2.5/find?q=${encodeURIComponent(cityName)}&type=like&cnt=30&appid=${apiKeyOWM}&units=metric&lang=es`;
-
-      try {
-        const r = await fetch(urlFind);
-        const data = await r.json();
-        if (!data.list || data.list.length === 0) {
-          document.getElementById('result').innerHTML = '<p>No se encontró ninguna ciudad.</p>';
-          return;
-        }
-        if (data.list.length === 1) {
-          showWeather(data.list[0]);
-        } else {
-          showCityOptions(data.list);
-        }
-      } catch (err) {
-        document.getElementById('result').innerHTML = '<p>Error de conexión.</p>';
-      }
+      const city=document.getElementById('city').value.trim();
+      if(!city) return;
+      document.getElementById('result').innerHTML='<p class="loading">Cargando…</p>';
+      document.getElementById('cities').innerHTML='';
+      try{
+        const r=await fetch(`https://api.openweathermap.org/data/2.5/find?q=${encodeURIComponent(city)}&type=like&cnt=30&appid=${apiKeyOWM}&units=metric&lang=es`);
+        const data=await r.json();
+        if(!data.list?.length){document.getElementById('result').innerHTML='<p>No se encontró la ciudad.</p>';return}
+        if(data.list.length===1) showWeather(data.list[0]);else showCityOptions(data.list);
+      }catch{document.getElementById('result').innerHTML='<p>Error de conexión.</p>'}
     });
 
-    function showCityOptions(cities) {
-      const container = document.getElementById('cities');
-      container.innerHTML = '<p>Hay varias coincidencias. Elige una:</p>';
-      cities.forEach(c => {
-        const btn = document.createElement('button');
-        btn.textContent = `${c.name}, ${c.sys.country}`;
-        btn.addEventListener('click', () => {
-          container.innerHTML = '';
-          showWeather(c);
-        });
-        container.appendChild(btn);
+    function showCityOptions(cities){
+      const c=document.getElementById('cities');
+      c.innerHTML='<p>Hay varias coincidencias. Elige una:</p>';
+      cities.forEach(city=>{
+        const btn=document.createElement('button');
+        btn.textContent=`${city.name}, ${city.sys.country}`;
+        btn.onclick=()=>{c.innerHTML='';showWeather(city)};
+        c.appendChild(btn);
       });
     }
 
-    async function showWeather(city) {
-      const { lat, lon } = city.coord;
-      const urlWeather = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKeyOWM}&units=metric&lang=es`;
+    async function showWeather(city){
+      const {lat,lon}=city.coord;
+      const wRes=await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKeyOWM}&units=metric&lang=es`);
+      const w=await wRes.json();
+      const coastal=isCoastal(w.name,w.sys.country);
 
-      try {
-        const wRes = await fetch(urlWeather);
-        const weather = await wRes.json();
+      let html=`
+        <div class="weather-card">
+          <h2>${w.name}, ${w.sys.country}</h2>
+          <p><strong>${w.weather[0].description}</strong></p>
+          <p><strong>${w.main.temp} °C</strong> (sensación ${w.main.feels_like} °C)</p>
+          <p>Mín. ${w.main.temp_min} °C / Máx. ${w.main.temp_max} °C</p>
+          <p>Humedad ${w.main.humidity} % · Presión ${w.main.pressure} hPa</p>
+          <p>Viento ${w.wind.speed} m/s</p>
+          <img src="https://openweathermap.org/img/wn/${w.weather[0].icon}@2x.png" alt="icono">
+        </div>`;
 
-        let resultHTML = `
-          <div class="weather-card">
-            <h2>${weather.name}, ${weather.sys.country}</h2>
-            <p><strong>${weather.weather[0].description}</strong></p>
-            <p><strong>${weather.main.temp} °C</strong> (sensación ${weather.main.feels_like} °C)</p>
-            <p>Mín. ${weather.main.temp_min} °C / Máx. ${weather.main.temp_max} °C</p>
-            <p>Humedad ${weather.main.humidity} % · Presión ${weather.main.pressure} hPa</p>
-            <p>Viento ${weather.wind.speed} m/s</p>
-            <img src="https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png" alt="icono del clima">
-          </div>`;
-
-        document.getElementById('result').innerHTML = resultHTML;
-
-        // Verificar si es ciudad costera y obtener datos marítimos
-        if (isCoastalCity(weather.name, weather.sys.country)) {
-          document.getElementById('result').innerHTML += '<div class="loading">Cargando datos marítimos...</div>';
-          await getMarineWeather(lat, lon);
-        }
-
-      } catch (err) {
-        console.error(err);
-        document.getElementById('result').innerHTML = '<p>Error al obtener los datos.</p>';
+      if(coastal){
+        html+=`<p class="loading">Cargando datos marítimos…</p>`;
+        document.getElementById('result').innerHTML=html;
+        await getMarine(lat,lon);
+      }else{
+        document.getElementById('result').innerHTML=html;
       }
     }
 
-    async function getMarineWeather(lat, lon) {
-      try {
-        // Usar un proxy CORS o endpoint que permita solicitudes desde el navegador
-        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-        const now = new Date();
-        const start = now.toISOString();
-        const end = new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString();
-        
-        const params = 'waveHeight,wavePeriod,waveDirection,windWaveHeight,swellHeight';
-        const url = `${proxyUrl}https://api.stormglass.io/v2/weather/point?lat=${lat}&lng=${lon}&params=${params}&start=${start}&end=${end}&source=sg`;
+    async function getMarine(lat,lon){
+      try{
+        const start=new Date().toISOString();
+        const end=new Date(Date.now()+24*60*60*1000).toISOString();
+        const params='waveHeight,wavePeriod,waveDirection';
+        const url=`https://api.stormglass.io/v2/weather/point?lat=${lat}&lng=${lon}&params=${params}&start=${start}&end=${end}&source=sg`;
+        const r=await fetch(url,{headers:{Authorization:apiKeyStorm}});
+        const data=await r.json();
+        const h=data.hours?.[0];
+        if(!h){throw 'sin datos'}
 
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            'Authorization': `${apiKeyStorm}`,
-            'Content-Type': 'application/json'
-          }
-        });
-
-        if (!response.ok) {
-          console.log('Stormglass response not ok:', response.status);
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log('Marine data received:', data);
-        
-        // Remover el loader de datos marítimos
-        const loadingElements = document.querySelectorAll('.loading');
-        loadingElements.forEach(el => {
-          if (el.textContent.includes('marítimos')) {
-            el.remove();
-          }
-        });
-
-        if (data.hours && data.hours.length > 0) {
-          displayMarineData(data.hours[0]);
-        } else {
-          displaySimpleMarineData(lat, lon);
-        }
-
-      } catch (error) {
-        console.error('Error fetching marine data:', error);
-        
-        // Remover el loader en caso de error
-        const loadingElements = document.querySelectorAll('.loading');
-        loadingElements.forEach(el => {
-          if (el.textContent.includes('marítimos')) {
-            el.remove();
-          }
-        });
-        
-        // Mostrar datos marítimos simplificados basados en coordenadas
-        displaySimpleMarineData(lat, lon);
+        document.querySelector('.loading')?.remove();
+        document.getElementById('result').insertAdjacentHTML('beforeend',`
+          <div class="marine-card">
+            <h3>Condiciones Marítimas</h3>
+            <div class="marine-grid">
+              <div class="marine-item">
+                <strong class="wave-height">${(h.waveHeight?.sg||'N/D')} m</strong>
+                <small>Altura olas</small>
+              </div>
+              <div class="marine-item">
+                <strong>${(h.wavePeriod?.sg||'N/D')} s</strong>
+                <small>Período</small>
+              </div>
+            </div>
+            <p><strong>Dirección:</strong> ${Math.round(h.waveDirection?.sg||0)}°</p>
+          </div>`);
+      }catch(e){
+        document.querySelector('.loading')?.remove();
+        document.getElementById('result').insertAdjacentHTML('beforeend',`
+          <div class="marine-card">
+            <h3>Datos marítimos no disponibles</h3>
+            <p>Consulte fuentes oficiales para navegación.</p>
+          </div>`);
       }
-    }
-    
-    function displaySimpleMarineData(lat, lon) {
-      // Datos estimados basados en la ubicación
-      const estimatedData = {
-        waveHeight: Math.random() * 2 + 0.5, // Entre 0.5 y 2.5m
-        condition: lat > 40 ? 'Condiciones atlánticas' : 'Condiciones mediterráneas',
-        warning: 'Datos estimados - Consulte fuentes oficiales para navegación'
-      };
-      
-      const marineHTML = `
-        <div class="marine-card">
-          <h3>Condiciones Marítimas Estimadas</h3>
-          <div class="marine-grid">
-            <div class="marine-item">
-              <strong class="wave-height">${Math.round(estimatedData.waveHeight * 100) / 100} m</strong>
-              <small>Altura estimada</small>
-            </div>
-            <div class="marine-item">
-              <strong>Mar ${estimatedData.waveHeight < 1 ? 'tranquilo' : estimatedData.waveHeight < 2 ? 'moderado' : 'agitado'}</strong>
-              <small>Estado del mar</small>
-            </div>
-          </div>
-          <p><strong>Zona:</strong> ${estimatedData.condition}</p>
-          <p><em>${estimatedData.warning}</em></p>
-        </div>`;
-
-      document.getElementById('result').innerHTML += marineHTML;
-    }
-
-    function displayMarineData(marineData) {
-      const waveHeight = marineData.waveHeight?.sg || 'N/D';
-      const wavePeriod = marineData.wavePeriod?.sg || 'N/D';
-      const waveDirection = marineData.waveDirection?.sg || 'N/D';
-      const windWaveHeight = marineData.windWaveHeight?.sg || 'N/D';
-      const swellHeight = marineData.swellHeight?.sg || 'N/D';
-      const swellPeriod = marineData.swellPeriod?.sg || 'N/D';
-      const swellDirection = marineData.swellDirection?.sg || 'N/D';
-      const seaLevel = marineData.seaLevel?.sg || 'N/D';
-
-      const getWaveCondition = (height) => {
-        if (height === 'N/D') return 'Desconocido';
-        const h = parseFloat(height);
-        if (h < 0.5) return 'Muy tranquilo';
-        if (h < 1) return 'Tranquilo';
-        if (h < 2) return 'Moderado';
-        if (h < 3) return 'Agitado';
-        return 'Muy agitado';
-      };
-
-      const getDirectionText = (degrees) => {
-        if (degrees === 'N/D') return 'N/D';
-        const dirs = ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO'];
-        const index = Math.round(degrees / 45) % 8;
-        return `${dirs[index]} (${Math.round(degrees)}°)`;
-      };
-
-      const marineHTML = `
-        <div class="marine-card">
-          <h3>Condiciones Marítimas</h3>
-          
-          <div class="marine-grid">
-            <div class="marine-item">
-              <strong class="wave-height">${waveHeight !== 'N/D' ? Math.round(waveHeight * 100) / 100 + ' m' : 'N/D'}</strong>
-              <small>Altura de olas</small><br>
-              <small>(${getWaveCondition(waveHeight)})</small>
-            </div>
-            
-            <div class="marine-item">
-              <strong>${wavePeriod !== 'N/D' ? Math.round(wavePeriod) + ' s' : 'N/D'}</strong>
-              <small>Período de olas</small>
-            </div>
-            
-            <div class="marine-item">
-              <strong>${windWaveHeight !== 'N/D' ? Math.round(windWaveHeight * 100) / 100 + ' m' : 'N/D'}</strong>
-              <small>Olas por viento</small>
-            </div>
-            
-            <div class="marine-item">
-              <strong>${swellHeight !== 'N/D' ? Math.round(swellHeight * 100) / 100 + ' m' : 'N/D'}</strong>
-              <small>Marejada</small>
-            </div>
-          </div>
-          
-          <p><strong>Dirección de olas:</strong> ${getDirectionText(waveDirection)}</p>
-          <p><strong>Período de marejada:</strong> ${swellPeriod !== 'N/D' ? Math.round(swellPeriod) + ' s' : 'N/D'}</p>
-          <p><strong>Dirección de marejada:</strong> ${getDirectionText(swellDirection)}</p>
-          <p><strong>Nivel del mar:</strong> ${seaLevel !== 'N/D' ? Math.round(seaLevel * 100) / 100 + ' m' : 'N/D'}</p>
-        </div>`;
-
-      document.getElementById('result').innerHTML += marineHTML;
     }
   </script>
-
 </body>
 </html>
