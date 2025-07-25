@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Escritor C J Benito</title>
 
-  <!--  Variables y estilos originales  -->
   <style>
     :root{
       --bg:#f5f7fa; --card:#fff; --accent:#0077ff; --marine:#1e88e5;
@@ -15,7 +14,6 @@
     body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;padding:2rem}
     .wrapper{max-width:420px;width:100%;margin:auto}
 
-    /* Navegación */
     nav{display:flex;gap:.5rem;margin-bottom:1.5rem}
     nav button{
       flex:1;
@@ -32,11 +30,9 @@
     nav button.active,
     nav button:hover{background:var(--accent);color:#fff}
 
-    /* Contenido de secciones */
     section{display:none}
     section.active{display:block}
 
-    /* Estilos previos */
     h1{text-align:center;margin-bottom:1.5rem}
     form{display:flex;gap:.5rem}
     input,button{border:none;padding:.9rem 1.2rem;font-size:1rem;border-radius:var(--radius)}
@@ -55,7 +51,6 @@
     .marine-item strong{color:var(--marine);display:block;font-size:1.1em}
     .wave-height{font-size:1.5em;color:var(--marine);font-weight:bold}
 
-    /* iframe de gasolineras */
     .gas-iframe{
       width:100%;
       min-height:70vh;
@@ -67,13 +62,11 @@
 </head>
 <body>
   <div class="wrapper">
-    <!-- Navegación -->
     <nav>
       <button class="nav-btn active" data-section="clima">Clima</button>
       <button class="nav-btn" data-section="gas">Gasolineras</button>
     </nav>
 
-    <!-- Sección Clima (la que ya tenías) -->
     <section id="clima" class="active">
       <h1>Escritor C J Benito</h1>
       <form id="weatherForm">
@@ -84,7 +77,6 @@
       <div id="result"></div>
     </section>
 
-    <!-- Sección Gasolineras (iframe) -->
     <section id="gas">
       <h1>Precios de Gasolina en España</h1>
       <iframe
@@ -95,10 +87,8 @@
     </section>
   </div>
 
-  <!-- Scripts originales + pequeño router -->
   <script>
     const apiKeyOWM = '42fb25c111df56e277d76dd2b52bdc65';
-    const apiKeyStorm = '1f3bb258-6877-11f0-89b2-0242ac130006-1f3bb2b2-6877-11f0-89b2-0242ac130006';
 
     const coastalCities = [
       'valencia','barcelona','alicante','málaga','cádiz','huelva','gijón','a coruña','vigo',
@@ -165,14 +155,11 @@
 
     async function getMarine(lat,lon){
       try{
-        const start=new Date().toISOString();
-        const end=new Date(Date.now()+24*60*60*1000).toISOString();
-        const params='waveHeight,wavePeriod,waveDirection';
-        const url=`https://api.stormglass.io/v2/weather/point?lat=${lat}&lng=${lon}&params=${params}&start=${start}&end=${end}&source=sg`;
-        const r=await fetch(url,{headers:{Authorization:apiKeyStorm}});
+        const url=`https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lon}&hourly=wave_height,wave_period,wave_direction&timezone=auto`;
+        const r=await fetch(url);
         const data=await r.json();
-        const h=data.hours?.[0];
-        if(!h){throw 'sin datos'}
+        const h=data.hourly;
+        if(!h || !h.wave_height) throw 'sin datos';
 
         document.querySelector('.loading')?.remove();
         document.getElementById('result').insertAdjacentHTML('beforeend',`
@@ -180,15 +167,15 @@
             <h3>Condiciones Marítimas</h3>
             <div class="marine-grid">
               <div class="marine-item">
-                <strong class="wave-height">${(h.waveHeight?.sg||'N/D')} m</strong>
+                <strong class="wave-height">${(h.wave_height[0] || 0).toFixed(1)} m</strong>
                 <small>Altura olas</small>
               </div>
               <div class="marine-item">
-                <strong>${(h.wavePeriod?.sg||'N/D')} s</strong>
+                <strong>${(h.wave_period[0] || 0).toFixed(1)} s</strong>
                 <small>Período</small>
               </div>
             </div>
-            <p><strong>Dirección:</strong> ${Math.round(h.waveDirection?.sg||0)}°</p>
+            <p><strong>Dirección:</strong> ${Math.round(h.wave_direction[0] || 0)}°</p>
           </div>`);
       }catch(e){
         document.querySelector('.loading')?.remove();
@@ -200,7 +187,6 @@
       }
     }
 
-    /*  Pequeño router para cambiar de sección  */
     document.querySelectorAll('.nav-btn').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         const target = btn.dataset.section;
