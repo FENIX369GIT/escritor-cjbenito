@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tiempo</title>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --accent: #0077ff;
+      --text: #333;
+      --subtle: #8a94a6;
+      --radius: 12px;
+      --shadow: 0 4px 14px rgba(0,0,0,.08);
+      --font: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    .wrapper{
+      width: 100%;
+      max-width: 420px;
+    }
+    h1{ text-align: center; margin-bottom: 1.5rem; }
+    form{ display: flex; gap: .5rem; }
+    input, button{
+      border: none;
+      padding: .9rem 1.2rem;
+      font-size: 1rem;
+      border-radius: var(--radius);
+    }
+    input{
+      flex: 1 1 auto;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      outline: none;
+    }
+    button{
+      background: var(--accent);
+      color: #fff;
+      cursor: pointer;
+      transition: opacity .2s;
+    }
+    button:hover{ opacity: .9; }
+    #cities{
+      margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      justify-content: center;
+    }
+    #cities button{
+      background: var(--card);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      padding: .4rem .8rem;
+      cursor: pointer;
+    }
+    #result{ margin-top: 1.5rem; }
+    .weather-card{
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      animation: fade .4s ease;
+    }
+    @keyframes fade{
+      from{opacity:0;transform:translateY(-10px)}
+      to{opacity:1;transform:none}
+    }
+    .weather-card h2{ margin-bottom: .5rem; font-size: 1.5rem; }
+    .weather-card p{ margin: .3rem 0; color: var(--subtle); }
+    .weather-card strong{ color: var(--text); }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+    <h1>Tiempo</h1>
+
+    <form id="weatherForm">
+      <input id="city" type="text" placeholder="Ej. Valencia" required>
+      <button type="submit">Buscar</button>
+    </form>
+
+    <div id="cities"></div>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const apiKeyOWM = '42fb25c111df56e277d76dd2b52bdc65';
+    const loaderHTML = '<div style="text-align:center;font-size:1.2rem">Cargando…</div>';
+
+    document.getElementById('weatherForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const cityName = document.getElementById('city').value.trim();
+      if (!cityName) return;
+
+      document.getElementById('result').innerHTML = loaderHTML;
+      document.getElementById('cities').innerHTML = '';
+
+      const urlFind = `https://api.openweathermap.org/data/2.5/find?q=${encodeURIComponent(cityName)}&type=like&cnt=30&appid=${apiKeyOWM}&units=metric&lang=es`;
+
+      try {
+        const r = await fetch(urlFind);
+        const data = await r.json();
+        if (!data.list || data.list.length === 0) {
+          document.getElementById('result').innerHTML = '<p>No se encontró ninguna ciudad.</p>';
+          return;
+        }
+        if (data.list.length === 1) {
+          showWeather(data.list[0]);
+        } else {
+          showCityOptions(data.list);
+        }
+      } catch (err) {
+        document.getElementById('result').innerHTML = '<p>Error de conexión.</p>';
+      }
+    });
+
+    function showCityOptions(cities) {
+      const container = document.getElementById('cities');
+      container.innerHTML = '<p>Hay varias coincidencias. Elige una:</p>';
+      cities.forEach(c => {
+        const btn = document.createElement('button');
+        btn.textContent = `${c.name}, ${c.sys.country}`;
+        btn.addEventListener('click', () => {
+          container.innerHTML = '';
+          showWeather(c);
+        });
+        container.appendChild(btn);
+      });
+    }
+
+    async function showWeather(city) {
+      const { lat, lon } = city.coord;
+      const urlWeather = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKeyOWM}&units=metric&lang=es`;
+
+      try {
+        const wRes = await fetch(urlWeather);
+        const weather = await wRes.json();
+
+        document.getElementById('result').innerHTML = `
+          <div class="weather-card">
+            <h2>${weather.name}, ${weather.sys.country}</h2>
+            <p><strong>${weather.weather[0].description}</strong></p>
+            <p><strong>${weather.main.temp} °C</strong> (sensación ${weather.main.feels_like} °C)</p>
+            <p>Mín. ${weather.main.temp_min} °C / Máx. ${weather.main.temp_max} °C</p>
+            <p>Humedad ${weather.main.humidity} % · Presión ${weather.main.pressure} hPa</p>
+            <p>Viento ${weather.wind.speed} m/s</p>
+            <img src="https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png" alt="icono del clima">
+          </div>`;
+      } catch (err) {
+        console.error(err);
+        document.getElementById('result').innerHTML = '<p>Error al obtener los datos.</p>';
+      }
+    }
+  </script>
+
+</body>
+</html>
