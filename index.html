@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text y='20' font-size='20'>✏️</text></svg>"/>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext y='20' font-size='20'%3E✏️%3C/text%3E%3C/svg%3E"/>
   <style>
     :root{
       --bg:#000;
@@ -44,7 +44,6 @@
       transition:background .3s ease,color .3s ease;
     }
     .wrapper{max-width:700px;width:100%}
-    /* --- Theme toggle --- */
     .theme-toggle{
       position:absolute;
       top:1rem;
@@ -55,11 +54,11 @@
       font-size:1.4rem;
       cursor:pointer;
     }
-    /* --- Nav --- */
     nav{
       display:flex;
       gap:.5rem;
       margin-bottom:2rem;
+      flex-wrap:wrap;
     }
     nav button{
       flex:1;
@@ -79,7 +78,6 @@
       color:#000;
       transform:translateY(-2px);
     }
-    /* --- Section --- */
     section{display:none;animation:fadeIn .5s ease}
     section.active{display:block}
     @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -105,7 +103,6 @@
       transition:all .2s ease;
     }
     button[type="submit"]:hover{opacity:.9}
-    /* --- Cards --- */
     .weather-card,.marine-card{
       background:var(--card);
       border-radius:var(--radius);
@@ -118,13 +115,29 @@
     .marine-card{border-left:4px solid var(--accent)}
     .marine-card h3{color:var(--accent);display:flex;align-items:center;gap:.5rem;font-size:1.2rem}
     .marine-card h3::before{content:"🌊";font-size:1.4em}
-    .marine-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;margin-top:.5rem}
-    .marine-item{background:rgba(0,180,255,.1);padding:1rem;border-radius:10px;text-align:center;font-family:var(--mono)}
+    .marine-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+      gap:1rem;
+      margin-top:.5rem;
+    }
+    .marine-item{
+      background:rgba(0,180,255,.1);
+      padding:1rem;
+      border-radius:10px;
+      text-align:center;
+      font-family:var(--mono);
+    }
     .marine-item strong{color:var(--accent);display:block;font-size:1.2em}
     .wave-height{font-size:1.6em;color:var(--accent);font-weight:700}
-    .gas-iframe{width:100%;min-height:70vh;border:none;border-radius:var(--radius);box-shadow:var(--shadow)}
+    .gas-iframe,.guardias-iframe,.tv-iframe{
+      width:100%;
+      min-height:70vh;
+      border:none;
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
     .loading{text-align:center;color:var(--subtle);margin-top:1rem}
-    /* --- Responsive --- */
     @media(max-width:600px){
       h1{font-size:1.5rem}
       nav{flex-direction:column}
@@ -137,8 +150,12 @@
     <nav>
       <button class="nav-btn active" data-section="clima">Clima</button>
       <button class="nav-btn" data-section="gas">Gasolineras</button>
+      <button class="nav-btn" data-section="tv">Noticias RTVE</button>
+      <button class="nav-btn" data-section="tv2">Canales TV</button>
+      <button class="nav-btn" data-section="guardias">Guardias 2025</button>
     </nav>
 
+    <!-- ================== CLIMA ================== -->
     <section id="clima" class="active">
       <h1>Escritor C J Benito</h1>
       <form id="weatherForm">
@@ -149,14 +166,38 @@
       <div id="result"></div>
     </section>
 
+    <!-- ================== GASOLINERAS ================== -->
     <section id="gas">
       <h1>Precios de Gasolina en España</h1>
       <iframe class="gas-iframe" src="https://pakogarcia.github.io/gasolineras-espana/" title="Gasolineras España"></iframe>
     </section>
+
+    <!-- ================== TV en Directo ================== -->
+    <section id="tv">
+      <h1>RTVE 24h en Directo</h1>
+      <div class="weather-card">
+        <p>Pulsa el botón para ver el canal de noticias 24h de RTVE en directo.</p>
+        <a href="https://www.rtve.es/play/videos/directo/informativos/24h/" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:1rem;padding:1rem 1.5rem;background:var(--accent);color:#000;border-radius:var(--radius);text-decoration:none;font-weight:600;box-shadow:var(--shadow);transition:transform .2s ease;">
+          📺 Ver RTVE 24h en Directo
+        </a>
+      </div>
+    </section>
+
+    <!-- ================== CANALES TV – tv.garden ================== -->
+    <section id="tv2">
+      <h1>Canales TV – tv.garden</h1>
+      <iframe class="tv-iframe" src="https://tv.garden/" title="Canales de televisión gratuitos" loading="lazy" allowfullscreen></iframe>
+    </section>
+
+    <!-- ================== GUARDIAS 2025 ================== -->
+    <section id="guardias">
+      <h1>Guardias 2025 – COF Colegiados</h1>
+      <iframe class="guardias-iframe" src="https://www.cofco.org/guardias-2025/" title="Guardias 2025" loading="lazy" allowfullscreen></iframe>
+    </section>
   </div>
 
   <script>
-    /* --- Tema oscuro / claro --- */
+    /* ------------------ TEMA ------------------ */
     const toggleBtn = document.querySelector('.theme-toggle');
     const html = document.documentElement;
     const saved = localStorage.getItem('theme') || 'dark';
@@ -168,14 +209,9 @@
       localStorage.setItem('theme', next);
     });
 
-    /* --- Resto de JS sin cambios --- */
+    /* ------------------ CLIMA ------------------ */
     const apiKeyOWM = '42fb25c111df56e277d76dd2b52bdc65';
-    const coastalCities = [
-      'valencia','barcelona','alicante','málaga','cádiz','huelva','gijón','a coruña','vigo',
-      'bilbao','santander','san sebastián','palma','ibiza','mahón','las palmas','santa cruz de tenerife',
-      'almería','cartagena','murcia','castellón','tarragona','girona'
-    ];
-
+    const coastalCities = ['valencia','barcelona','alicante','málaga','cádiz','huelva','gijón','a coruña','vigo','bilbao','santander','san sebastián','palma','ibiza','mahón','las palmas','santa cruz de tenerife','almería','cartagena','murcia','castellón','tarragona','girona'];
     function isCoastal(name, country){
       if(country!=='ES') return false;
       const n=name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
@@ -267,6 +303,7 @@
       }
     }
 
+    /* ------------------ NAVEGACIÓN ------------------ */
     document.querySelectorAll('.nav-btn').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         const target = btn.dataset.section;
