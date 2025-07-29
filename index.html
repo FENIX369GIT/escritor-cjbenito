@@ -9,156 +9,178 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext y='20' font-size='20'%3E✏️%3C/text%3E%3C/svg%3E"/>
   <style>
-    :root{
-      --bg:#000;
-      --bg-soft:#111;
-      --card:#0a0a0a;
-      --accent:#00b4ff;
-      --accent2:#0af;
-      --text:#e1e1ff;
-      --subtle:#6b7280;
-      --radius:14px;
-      --shadow:0 8px 24px rgba(0,180,255,.15);
-      --font:'Inter',sans-serif;
-      --mono:'JetBrains Mono',monospace;
+    :root {
+      --bg: #000;
+      --bg-soft: #111;
+      --card: #0a0a0a;
+      --accent: #00b4ff;
+      --accent2: #0af;
+      --text: #e1e1ff;
+      --subtle: #6b7280;
+      --radius: 14px;
+      --shadow: 0 8px 24px rgba(0, 180, 255, .15);
+      --font: 'Inter', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
     }
-    [data-theme="light"]{
-      --bg:#f2f5f9;
-      --bg-soft:#fff;
-      --card:#ffffff;
-      --accent:#0066ff;
-      --accent2:#0099ff;
-      --text:#111;
-      --subtle:#4b5563;
-      --shadow:0 8px 24px rgba(0,102,255,.15);
+    [data-theme="light"] {
+      --bg: #f2f5f9;
+      --bg-soft: #fff;
+      --card: #ffffff;
+      --accent: #0066ff;
+      --accent2: #0099ff;
+      --text: #111;
+      --subtle: #4b5563;
+      --shadow: 0 8px 24px rgba(0, 102, 255, .15);
     }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      background:var(--bg);
-      color:var(--text);
-      font-family:var(--font);
-      min-height:100vh;
-      display:flex;
-      justify-content:center;
-      padding:2rem 1rem;
-      transition:background .3s ease,color .3s ease;
+    * { box-sizing: border-box; margin: 0; padding: 0 }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 2rem 1rem;
+      transition: background .3s ease, color .3s ease;
     }
-    .wrapper{max-width:700px;width:100%}
-    .theme-toggle{
-      position:absolute;
-      top:1rem;
-      right:1rem;
-      background:none;
-      border:none;
-      color:var(--accent);
-      font-size:1.4rem;
-      cursor:pointer;
+    .wrapper { max-width: 700px; width: 100% }
+    .theme-toggle {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 1.4rem;
+      cursor: pointer;
     }
-    nav{
-      display:flex;
-      gap:.5rem;
-      margin-bottom:2rem;
-      flex-wrap:wrap;
+    nav {
+      display: flex;
+      gap: .5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
     }
-    nav button{
-      flex:1;
-      padding:.9rem;
-      border:none;
-      border-radius:var(--radius);
-      background:var(--card);
-      color:var(--accent);
-      font-size:1rem;
-      font-weight:600;
-      box-shadow:var(--shadow);
-      cursor:pointer;
-      transition:all .3s ease;
+    nav button {
+      flex: 1;
+      padding: .9rem;
+      border: none;
+      border-radius: var(--radius);
+      background: var(--card);
+      color: var(--accent);
+      font-size: 1rem;
+      font-weight: 600;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: all .3s ease;
     }
-    nav button.active,nav button:hover{
-      background:var(--accent);
-      color:#000;
-      transform:translateY(-2px);
+    nav button.active,
+    nav button:hover {
+      background: var(--accent);
+      color: #000;
+      transform: translateY(-2px);
     }
-    section{display:none;animation:fadeIn .5s ease}
-    section.active{display:block}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-    form{display:flex;gap:.5rem;margin-bottom:1rem}
-    input,button{
-      border:none;
-      padding:1rem;
-      font-size:1rem;
-      border-radius:var(--radius);
+    section { display: none; animation: fadeIn .5s ease }
+    section.active { display: block }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px) }
+      to { opacity: 1; transform: none }
     }
-    input{
-      flex:1;
-      background:var(--card);
-      box-shadow:var(--shadow);
-      outline:none;
-      color:var(--text);
+    form { display: flex; gap: .5rem; margin-bottom: 1rem }
+    input, button {
+      border: none;
+      padding: 1rem;
+      font-size: 1rem;
+      border-radius: var(--radius);
     }
-    button[type="submit"]{
-      background:var(--accent);
-      color:#000;
-      cursor:pointer;
-      transition:all .2s ease;
+    input {
+      flex: 1;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      outline: none;
+      color: var(--text);
     }
-    button[type="submit"]:hover{opacity:.9}
-    .weather-card,.marine-card{
-      background:var(--card);
-      border-radius:var(--radius);
-      padding:1.5rem;
-      box-shadow:var(--shadow);
-      margin-bottom:1.5rem;
-      transition:transform .2s ease;
+    button[type="submit"] {
+      background: var(--accent);
+      color: #000;
+      cursor: pointer;
+      transition: all .2s ease;
     }
-    .weather-card:hover,.marine-card:hover{transform:translateY(-4px)}
-    .marine-card{border-left:4px solid var(--accent)}
-    .marine-card h3{color:var(--accent);display:flex;align-items:center;gap:.5rem;font-size:1.2rem}
-    .marine-card h3::before{content:"🌊";font-size:1.4em}
-    .marine-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-      gap:1rem;
-      margin-top:.5rem;
+    button[type="submit"]:hover { opacity: .9 }
+    .weather-card, .marine-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+      transition: transform .2s ease;
     }
-    .marine-item{
-      background:rgba(0,180,255,.1);
-      padding:1rem;
-      border-radius:10px;
-      text-align:center;
-      font-family:var(--mono);
+    .weather-card:hover, .marine-card:hover { transform: translateY(-4px) }
+    .marine-card { border-left: 4px solid var(--accent) }
+    .marine-card h3 {
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: 1.2rem;
     }
-    .marine-item strong{color:var(--accent);display:block;font-size:1.2em}
-    .wave-height{font-size:1.6em;color:var(--accent);font-weight:700}
-    .gas-iframe,.guardias-iframe,.tv-iframe{
-      width:100%;
-      min-height:70vh;
-      border:none;
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
+    .marine-card h3::before { content: "🌊"; font-size: 1.4em }
+    .marine-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      margin-top: .5rem;
     }
-    .loading{text-align:center;color:var(--subtle);margin-top:1rem}
-    @media(max-width:600px){
-      h1{font-size:1.5rem}
-      nav{flex-direction:column}
+    .marine-item {
+      background: rgba(0, 180, 255, .1);
+      padding: 1rem;
+      border-radius: 10px;
+      text-align: center;
+      font-family: var(--mono);
     }
-    .title-btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      width:100%;
-      margin-bottom:1.5rem;
-      padding:1rem 1.5rem;
-      font-size:clamp(1.5rem,2vw+1rem,2.2rem);
-      font-weight:600;
-      color:#000;
-      background:var(--accent);
-      border:none;
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      text-decoration:none;
-      transition:transform .2s ease;
+    .marine-item strong {
+      color: var(--accent);
+      display: block;
+      font-size: 1.2em;
     }
-    .title-btn:hover{transform:translateY(-2px)}
+    .wave-height { font-size: 1.6em; color: var(--accent); font-weight: 700 }
+    .gas-iframe, .guardias-iframe, .tv-iframe {
+      width: 100%;
+      min-height: 70vh;
+      border: none;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .loading { text-align: center; color: var(--subtle); margin-top: 1rem }
+    @media(max-width:600px) {
+      h1 { font-size: 1.5rem }
+      nav { flex-direction: column }
+    }
+    .title-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      margin-bottom: 1.5rem;
+      padding: 1rem 1.5rem;
+      font-size: clamp(1.5rem, 2vw + 1rem, 2.2rem);
+      font-weight: 600;
+      color: #000;
+      background: var(--accent);
+      border: none;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      text-decoration: none;
+      transition: transform .2s ease;
+    }
+    .title-btn:hover { transform: translateY(-2px) }
+
+    /* contador de visitas */
+    #contador {
+      text-align: center;
+      color: var(--subtle);
+      margin-top: 2rem;
+      font-family: var(--mono);
+    }
   </style>
 </head>
 <body>
@@ -170,19 +192,13 @@
       <button class="nav-btn" data-section="tv">Noticias 24H RTVE</button>
       <button class="nav-btn" data-section="tv2">Canales TV gratuitos</button>
       <button class="nav-btn" data-section="guardias">Farmacias de guardias</button>
-      <!-- NUEVO BOTÓN -->
       <button class="nav-btn" data-section="viajes">Tu agencia de viajes de confianza</button>
     </nav>
 
-    <!-- ================== CLIMA ================== -->
     <section id="clima" class="active">
-      <a class="title-btn"
-        href="https://www.amazon.es/Tienda-Kindle-C-J-Benito/s?rh=n%3A818936031%2Cp_27%3AC.%2BJ.%2BBenito"
-        target="_blank"
-        rel="noopener noreferrer">
+      <a class="title-btn" href="https://www.amazon.es/Tienda-Kindle-C-J-Benito/s?rh=n%3A818936031%2Cp_27%3AC.%2BJ.%2BBenito" target="_blank" rel="noopener noreferrer">
         Escritor C J Benito
       </a>
-
       <form id="weatherForm">
         <input id="city" type="text" placeholder="Ej. Valencia, Barcelona, Cádiz" required/>
         <button>Buscar</button>
@@ -191,13 +207,11 @@
       <div id="result"></div>
     </section>
 
-    <!-- ================== GASOLINERA ================== -->
     <section id="gas">
       <h1>Precios de Gasolina en España</h1>
       <iframe class="gas-iframe" src="https://pakogarcia.github.io/gasolineras-espana/" title="Gasolineras España"></iframe>
     </section>
 
-    <!-- ================== TV EN DIRECTO ================== -->
     <section id="tv">
       <h1>RTVE 24h en Directo</h1>
       <div class="weather-card">
@@ -208,32 +222,32 @@
       </div>
     </section>
 
-    <!-- ================== CANALES TV – tv.garden ================== -->
     <section id="tv2">
       <h1>Canales TV – tv.garden</h1>
       <iframe class="tv-iframe" src="https://tv.garden/" title="Canales de televisión gratuitos" loading="lazy" allowfullscreen></iframe>
     </section>
 
-    <!-- ================== GUARDIAS 2025 ================== -->
     <section id="guardias">
       <h1>Farmacias de guardia – COF Colegiados</h1>
       <iframe class="guardias-iframe" src="https://www.cofco.org/guardias-2025/" title="Guardias 2025" loading="lazy" allowfullscreen></iframe>
     </section>
 
-    <!-- ================== VIAJES – No Solo Viajes ================== -->
-<section id="viajes">
-  <h1>Tu agencia de viajes – No Solo Viajes</h1>
-  <div class="weather-card">
-    <p>Abre No Solo Viajes en una nueva pestaña y empieza a planificar tu viaje ideal.</p>
-    <a href="https://booking.nosoloviajes.voyaverte.es" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:1rem;padding:1rem 1.5rem;background:var(--accent);color:#000;border-radius:var(--radius);text-decoration:none;font-weight:600;box-shadow:var(--shadow);transition:transform .2s ease;">
-      🌍 Ir a No Solo Viajes
-    </a>
+    <section id="viajes">
+      <h1>Tu agencia de viajes – No Solo Viajes</h1>
+      <div class="weather-card">
+        <p>Abre No Solo Viajes en una nueva pestaña y empieza a planificar tu viaje ideal.</p>
+        <a href="https://booking.nosoloviajes.voyaverte.es" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:1rem;padding:1rem 1.5rem;background:var(--accent);color:#000;border-radius:var(--radius);text-decoration:none;font-weight:600;box-shadow:var(--shadow);transition:transform .2s ease;">
+          🌍 Ir a No Solo Viajes
+        </a>
+      </div>
+    </section>
+
+    <!-- CONTADOR DE VISITAS -->
+    <div id="contador">👁️ Visitas únicas desde este navegador: <span id="visitas">1</span></div>
+
   </div>
-</section>
- 
 
   <script>
-    /* ------------------ TEMA ------------------ */
     const toggleBtn = document.querySelector('.theme-toggle');
     const html = document.documentElement;
     const saved = localStorage.getItem('theme') || 'dark';
@@ -245,7 +259,6 @@
       localStorage.setItem('theme', next);
     });
 
-    /* ------------------ CLIMA ------------------ */
     const apiKeyOWM = '42fb25c111df56e277d76dd2b52bdc65';
     const coastalCities = ['valencia','barcelona','alicante','málaga','cádiz','huelva','gijón','a coruña','vigo','bilbao','santander','san sebastián','palma','ibiza','mahón','las palmas','santa cruz de tenerife','almería','cartagena','murcia','castellón','tarragona','girona'];
     function isCoastal(name, country){
@@ -295,7 +308,6 @@
           <p>Viento ${w.wind.speed} m/s</p>
           <img src="https://openweathermap.org/img/wn/${w.weather[0].icon}@2x.png" alt="icono del clima">
         </div>`;
-
       if(coastal){
         html+=`<p class="loading">Cargando datos marítimos…</p>`;
         document.getElementById('result').innerHTML=html;
@@ -312,7 +324,6 @@
         const data=await r.json();
         const h=data.hourly;
         if(!h || !h.wave_height) throw 'sin datos';
-
         document.querySelector('.loading')?.remove();
         document.getElementById('result').insertAdjacentHTML('beforeend',`
           <div class="marine-card">
@@ -339,7 +350,6 @@
       }
     }
 
-    /* ------------------ NAVEGACIÓN ------------------ */
     document.querySelectorAll('.nav-btn').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         const target = btn.dataset.section;
@@ -349,6 +359,17 @@
         btn.classList.add('active');
       });
     });
+
+    // ---------- CONTADOR DE VISITAS ----------
+    const contadorKey = 'cj_benito_visitas';
+    let visitas = localStorage.getItem(contadorKey);
+    if (!visitas) {
+      visitas = 1;
+      localStorage.setItem(contadorKey, visitas);
+    } else {
+      visitas = parseInt(visitas);
+    }
+    document.getElementById('visitas').textContent = visitas;
   </script>
 </body>
 </html>
