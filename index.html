@@ -3,11 +3,22 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Escritor C J Benito</title>
+  <title>Escritor C J Benito – Rutas & Servicios</title>
+
+  <!-- Leaflet (mapa) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Routing Machine -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+  <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+  <!-- Geocoder -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.css" />
+  <script src="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.min.js"></script>
+
+  <!-- Fuentes & tema -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext y='20' font-size='20'%3E✏️%3C/text%3E%3C/svg%3E"/>
   <style>
     :root{
       --bg:#000;
@@ -63,8 +74,7 @@
     nav button{
       flex:1;
       padding:.9rem;
-      border:none;
-      border-radius:var(--radius);
+      border:none;border-radius:var(--radius);
       background:var(--card);
       color:var(--accent);
       font-size:1rem;
@@ -80,28 +90,14 @@
     }
     section{display:none;animation:fadeIn .5s ease}
     section.active{display:block}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-    form{display:flex;gap:.5rem;margin-bottom:1rem}
-    input,button{
-      border:none;
-      padding:1rem;
-      font-size:1rem;
-      border-radius:var(--radius);
-    }
-    input{
-      flex:1;
-      background:var(--card);
-      box-shadow:var(--shadow);
-      outline:none;
-      color:var(--text);
-    }
-    button[type="submit"]{
-      background:var(--accent);
-      color:#000;
-      cursor:pointer;
-      transition:all .2s ease;
-    }
-    button[type="submit"]:hover{opacity:.9}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none}}
+
+    /* ---------- MAPA ---------- */
+    #map{height:60vh;width:100%;border-radius:var(--radius);box-shadow:var(--shadow);}
+    #controls{padding:10px;background:var(--card);border-radius:var(--radius);margin-bottom:.5rem;display:flex;gap:.5rem;flex-wrap:wrap}
+    #controls input[type=text]{flex:1;padding:.6rem;border:none;border-radius:var(--radius)}
+    #summary{padding:10px;font-size:14px;font-weight:bold;text-align:center;margin-top:.5rem}
+    .iframe-section iframe{width:100%;min-height:70vh;border:none;border-radius:var(--radius);box-shadow:var(--shadow);}
     .weather-card,.marine-card{
       background:var(--card);
       border-radius:var(--radius);
@@ -129,18 +125,7 @@
     }
     .marine-item strong{color:var(--accent);display:block;font-size:1.2em}
     .wave-height{font-size:1.6em;color:var(--accent);font-weight:700}
-    .gas-iframe,.guardias-iframe,.tv-iframe{
-      width:100%;
-      min-height:70vh;
-      border:none;
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-    }
-    .loading{text-align:center;color:var(--subtle);margin-top:1rem}
-    @media(max-width:600px){
-      h1{font-size:1.5rem}
-      nav{flex-direction:column}
-    }
+
     .title-btn{
       display:inline-flex;
       align-items:center;
@@ -159,30 +144,34 @@
       transition:transform .2s ease;
     }
     .title-btn:hover{transform:translateY(-2px)}
+    .loading{text-align:center;color:var(--subtle);margin-top:1rem}
+    @media(max-width:600px){
+      nav{flex-direction:column}
+    }
   </style>
 </head>
 <body>
   <button class="theme-toggle" title="Cambiar tema">🌓</button>
+
   <div class="wrapper">
     <nav>
       <button class="nav-btn active" data-section="clima">Clima y estado de la mar</button>
-      <button class="nav-btn" data-section="gas">Gasolineras económicas cerca de ti</button>
+      <button class="nav-btn" data-section="gas">Gasolineras económicas</button>
       <button class="nav-btn" data-section="tv">Noticias 24H RTVE</button>
       <button class="nav-btn" data-section="tv2">Canales TV gratuitos</button>
-      <button class="nav-btn" data-section="guardias">Farmacias de guardias</button>
-      <!-- NUEVO BOTÓN -->
-      <button class="nav-btn" data-section="viajes">Tu agencia de viajes de confianza</button>
+      <button class="nav-btn" data-section="guardias">Farmacias de guardia</button>
+      <button class="nav-btn" data-section="viajes">No Solo Viajes</button>
+      <!-- NUEVO apartado de rutas -->
+      <button class="nav-btn" data-section="rutas">Calcula tu ruta</button>
     </nav>
 
     <!-- ================== CLIMA ================== -->
     <section id="clima" class="active">
       <a class="title-btn"
-        href="https://www.amazon.es/Tienda-Kindle-C-J-Benito/s?rh=n%3A818936031%2Cp_27%3AC.%2BJ.%2BBenito"
-        target="_blank"
-        rel="noopener noreferrer">
+         href="https://www.amazon.es/Tienda-Kindle-C-J-Benito/s?rh=n%3A818936031%2Cp_27%3AC.%2BJ.%2BBenito"
+         target="_blank" rel="noopener noreferrer">
         Escritor C J Benito
       </a>
-
       <form id="weatherForm">
         <input id="city" type="text" placeholder="Ej. Valencia, Barcelona, Cádiz" required/>
         <button>Buscar</button>
@@ -192,45 +181,59 @@
     </section>
 
     <!-- ================== GASOLINERA ================== -->
-    <section id="gas">
+    <section id="gas" class="iframe-section">
       <h1>Precios de Gasolina en España</h1>
-      <iframe class="gas-iframe" src="https://pakogarcia.github.io/gasolineras-espana/" title="Gasolineras España"></iframe>
+      <iframe src="https://pakogarcia.github.io/gasolinerasespana/" title="Gasolineras España"></iframe>
     </section>
 
     <!-- ================== TV EN DIRECTO ================== -->
-    <section id="tv">
+    <section id="tv" class="iframe-section">
       <h1>RTVE 24h en Directo</h1>
       <div class="weather-card">
         <p>Pulsa el botón para ver el canal de noticias 24h de RTVE en directo.</p>
-        <a href="https://www.rtve.es/play/videos/directo/informativos/24h/" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:1rem;padding:1rem 1.5rem;background:var(--accent);color:#000;border-radius:var(--radius);text-decoration:none;font-weight:600;box-shadow:var(--shadow);transition:transform .2s ease;">
+        <a href="https://www.rtve.es/play/videos/directo/informativos/24h/" target="_blank"
+           style="display:inline-block;margin-top:1rem;padding:1rem 1.5rem;background:var(--accent);color:#000;border-radius:var(--radius);text-decoration:none;font-weight:600;box-shadow:var(--shadow);transition:transform .2s ease;">
           📺 Ver RTVE 24h en Directo
         </a>
       </div>
     </section>
 
-    <!-- ================== CANALES TV – tv.garden ================== -->
-    <section id="tv2">
+    <!-- ================== tv.garden ================== -->
+    <section id="tv2" class="iframe-section">
       <h1>Canales TV – tv.garden</h1>
-      <iframe class="tv-iframe" src="https://tv.garden/" title="Canales de televisión gratuitos" loading="lazy" allowfullscreen></iframe>
+      <iframe src="https://tv.garden/" title="Canales de televisión gratuitos" loading="lazy" allowfullscreen></iframe>
     </section>
 
     <!-- ================== GUARDIAS 2025 ================== -->
-    <section id="guardias">
+    <section id="guardias" class="iframe-section">
       <h1>Farmacias de guardia – COF Colegiados</h1>
-      <iframe class="guardias-iframe" src="https://www.cofco.org/guardias-2025/" title="Guardias 2025" loading="lazy" allowfullscreen></iframe>
+      <iframe src="https://www.cofco.org/guardias-2025/" title="Guardias 2025" loading="lazy" allowfullscreen></iframe>
     </section>
 
-    <!-- ================== VIAJES – No Solo Viajes ================== -->
-<section id="viajes">
-  <h1>Tu agencia de viajes – No Solo Viajes</h1>
-  <div class="weather-card">
-    <p>Abre No Solo Viajes en una nueva pestaña y empieza a planificar tu viaje ideal.</p>
-    <a href="https://booking.nosoloviajes.voyaverte.es" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:1rem;padding:1rem 1.5rem;background:var(--accent);color:#000;border-radius:var(--radius);text-decoration:none;font-weight:600;box-shadow:var(--shadow);transition:transform .2s ease;">
-      🌍 Ir a No Solo Viajes
-    </a>
+    <!-- ================== VIAJES ================== -->
+    <section id="viajes" class="iframe-section">
+      <h1>Tu agencia de viajes – No Solo Viajes</h1>
+      <div class="weather-card">
+        <p>Abre No Solo Viajes en una nueva pestaña y empieza a planificar tu viaje ideal.</p>
+        <a href="https://booking.nosoloviajes.voyaverte.es" target="_blank"
+           style="display:inline-block;margin-top:1rem;padding:1rem 1.5rem;background:var(--accent);color:#000;border-radius:var(--radius);text-decoration:none;font-weight:600;box-shadow:var(--shadow);transition:transform .2s ease;">
+          🌍 Ir a No Solo Viajes
+        </a>
+      </div>
+    </section>
+
+    <!-- ================== NUEVO APARTADO RUTAS ================== -->
+    <section id="rutas">
+      <h1>Calcula tu ruta</h1>
+      <div id="controls">
+        <button onclick="ubicacionActual()">Mi ubicación actual</button>
+        <input type="text" id="destino" placeholder="Escribe localidad o dirección de destino" />
+        <button onclick="buscarDestino()">Buscar y trazar ruta</button>
+      </div>
+      <div id="map"></div>
+      <div id="summary"></div>
+    </section>
   </div>
-</section>
- 
 
   <script>
     /* ------------------ TEMA ------------------ */
@@ -245,9 +248,21 @@
       localStorage.setItem('theme', next);
     });
 
-    /* ------------------ CLIMA ------------------ */
+    /* ------------------ NAVEGACIÓN ------------------ */
+    document.querySelectorAll('.nav-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const target = btn.dataset.section;
+        document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+        document.getElementById(target).classList.add('active');
+        btn.classList.add('active');
+      });
+    });
+
+    /* ---------- CLIMA ---------- */
     const apiKeyOWM = '42fb25c111df56e277d76dd2b52bdc65';
-    const coastalCities = ['valencia','barcelona','alicante','málaga','cádiz','huelva','gijón','a coruña','vigo','bilbao','santander','san sebastián','palma','ibiza','mahón','las palmas','santa cruz de tenerife','almería','cartagena','murcia','castellón','tarragona','girona'];
+    const coastalCities = ['valencia','barcelona','alicante','málaga','cádiz','huelva','gijón','acoruña','vigo','bilbao','santander','san sebastián','palma','ibiza','mahón','las palmas','santa cruz de tenerife','almería','cartagena','murcia','castellón','tarragona','girona'];
+
     function isCoastal(name, country){
       if(country!=='ES') return false;
       const n=name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
@@ -264,7 +279,7 @@
         const r=await fetch(`https://api.openweathermap.org/data/2.5/find?q=${encodeURIComponent(city)}&type=like&cnt=30&appid=${apiKeyOWM}&units=metric&lang=es`);
         const data=await r.json();
         if(!data.list?.length){document.getElementById('result').innerHTML='<p>No se encontró la ciudad.</p>';return}
-        if(data.list.length===1) showWeather(data.list[0]);else showCityOptions(data.list);
+        if(data.list.length===1) showWeather(data.list[0]); else showCityOptions(data.list);
       }catch{document.getElementById('result').innerHTML='<p>Error de conexión.</p>'}
     });
 
@@ -339,16 +354,74 @@
       }
     }
 
-    /* ------------------ NAVEGACIÓN ------------------ */
-    document.querySelectorAll('.nav-btn').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const target = btn.dataset.section;
-        document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-        document.getElementById(target).classList.add('active');
-        btn.classList.add('active');
-      });
-    });
+    /* ---------- MAPA / RUTAS ---------- */
+    const map = L.map('map').setView([40,-4],6);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+      attribution:'© OpenStreetMap contributors'
+    }).addTo(map);
+
+    let routeControl=null, markerOrigen=null, markerDestino=null, posOrigen=null;
+
+    function limpiar(){
+      if(routeControl) map.removeControl(routeControl);
+      if(markerOrigen) map.removeLayer(markerOrigen);
+      if(markerDestino) map.removeLayer(markerDestino);
+      document.getElementById('summary').textContent='';
+    }
+
+    function ubicacionActual(){
+      limpiar();
+      if(!navigator.geolocation){alert('Geolocalización no soportada');return}
+      navigator.geolocation.getCurrentPosition(pos=>{
+        posOrigen=[pos.coords.latitude,pos.coords.longitude];
+        markerOrigen=L.marker(posOrigen).addTo(map).bindPopup('Estoy aquí').openPopup();
+        map.setView(posOrigen,14);
+      },err=>alert(err.message));
+    }
+
+    function buscarDestino(){
+      const texto=document.getElementById('destino').value.trim();
+      if(!texto){alert('Escribe un destino');return}
+      if(!posOrigen){alert('Primero pulsa “Mi ubicación actual”');return}
+
+      limpiar();
+      markerOrigen=L.marker(posOrigen).addTo(map).bindPopup('Origen');
+
+      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(texto)}`)
+        .then(r=>r.json())
+        .then(data=>{
+          if(!data.length){alert('Destino no encontrado');return}
+          const dest=[parseFloat(data[0].lat),parseFloat(data[0].lon)];
+          markerDestino=L.marker(dest).addTo(map).bindPopup(texto).openPopup();
+
+          routeControl = L.Routing.control({
+          waypoints: [L.latLng(posOrigen), L.latLng(dest)],
+          routeWhileDragging: true,
+          createMarker: () => null,
+          geocoder: L.Control.Geocoder.nominatim(),
+         lineOptions: { styles: [{ color: 'blue', weight: 5 }] },
+         show: false // <-- esto lo oculta
+          }).addTo(map);
+
+          routeControl.on('routesfound',e=>{
+            const r=e.routes[0].summary;
+            document.getElementById('summary').textContent=
+              `Distancia: ${(r.totalDistance/1000).toFixed(2)} km – Tiempo: ${Math.round(r.totalTime/60)} min`;
+          });
+        })
+        .catch(e=>alert('Error al buscar destino: '+e));
+    }
+
+    /* --- Fix: Redimensionar mapa cuando se muestra la sección de rutas --- */
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (btn.dataset.section === 'rutas') {
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 100); // pequeño retraso para que se renderice el contenedor
+    }
+  });
+});
   </script>
 </body>
 </html>
